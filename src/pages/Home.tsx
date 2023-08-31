@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { v4 as randomUUID } from 'uuid';
+import FormStyled from '../components/FormStyled';
+import Modal from '../components/Modal';
 import ModalStyled from '../components/ModalStyled';
 
 export interface LivroProps {
@@ -23,11 +25,12 @@ const estadoInicial: LivroProps = {
 };
 
 interface modoProps {
-  tipo: 'edicao' | 'exclusao' | undefined;
+  tipo: 'edicao' | 'exclusao';
+  aberto: boolean;
 }
 
-function Form() {
-  const [modo, useModo] = useState<modoProps>({ tipo: undefined });
+function Home() {
+  const [modo, setModo] = useState<modoProps>({ tipo: 'edicao', aberto: false });
   const [livro, setLivro] = useState<LivroProps>(estadoInicial);
   const [livros, setLivros] = useState<LivroProps[]>([]);
 
@@ -62,13 +65,19 @@ function Form() {
   }
 
   function prepararEdicao(id: string) {
-    // setModal(true)
+    setModo({
+      tipo: 'edicao',
+      aberto: true
+    });
 
     const livroEncontrado = livros.find((item) => item.id == id);
 
     if (!livroEncontrado) {
       alert('ID não encontrado.');
-      // setModal(false)
+      setModo({
+        tipo: 'edicao',
+        aberto: false
+      });
       return;
     }
 
@@ -89,39 +98,52 @@ function Form() {
 
     setLivros(copiaLista);
     setLivro(estadoInicial);
+    setModo({
+      tipo: 'edicao',
+      aberto: false
+    });
+    setLivro(estadoInicial);
+  }
+
+  function fecharModal() {
+    setModo({
+      tipo: 'edicao',
+      aberto: false
+    });
+    setLivro(estadoInicial);
   }
 
   return (
     <>
       {/* ANA */}
-      <form
+      <FormStyled
         onSubmit={(e) => {
           e.preventDefault();
           criar();
         }}
       >
         <div>
-          <label>Título:</label>
+          <label>Título</label>
           <input type="text" value={livro.titulo} name="titulo" onChange={mudarEstado} />
         </div>
 
         <div>
-          <label>Autor:</label>
+          <label>Autor</label>
           <input type="text" value={livro.autor} name="autor" onChange={mudarEstado} />
         </div>
 
         <div>
-          <label>Ano de publicação:</label>
+          <label>Ano de publicação</label>
           <input type="number" value={livro.anoDePublicacao} name="anoDePublicacao" onChange={mudarEstado} />
         </div>
 
         <div>
-          <label>Gênero:</label>
+          <label>Gênero</label>
           <input type="text" value={livro.genero} name="genero" onChange={mudarEstado} />
         </div>
 
         <div>
-          <label>Descrição:</label>
+          <label>Descrição</label>
           <textarea value={livro.descricao} name="descricao" onChange={mudarEstado} />
         </div>
 
@@ -129,7 +151,7 @@ function Form() {
         <button type="button" onClick={editar}>
           salvar edição
         </button>
-      </form>
+      </FormStyled>
 
       {/* rafa */}
       <table>
@@ -162,30 +184,13 @@ function Form() {
         </tbody>
       </table>
 
-      {modo?.tipo === 'edicao' ? (
+      {modo?.aberto && (
         <ModalStyled>
-          <label>Título:</label>
-          <input type="text" value={livro.titulo} name="titulo" />
-          <label>Autor:</label>
-          <input type="text" value={livro.autor} name="autor" />
-          <label>Ano de publicação:</label>
-          <input type="number" value={livro.anoDePublicacao} name="anoDePublicacao" />
-          <label>Gênero:</label>
-          <input type="text" value={livro.genero} name="genero" />
-          <label>Descrição:</label>
-          <textarea value={livro.descricao} name="descricao" />
+          <Modal type={modo.tipo} livro={livro} editar={editar} mudaEstado={mudarEstado} fechar={fecharModal} />
         </ModalStyled>
-      ) : (
-        <>
-          <p>Você realmente deseja excluir este regitro</p>
-          <button>Excluir</button>
-          <button>Cancelar</button>
-
-          {/* ('Você realmente deseja excluir este regitro.') */}
-        </>
       )}
     </>
   );
 }
 
-export default Form;
+export default Home;
