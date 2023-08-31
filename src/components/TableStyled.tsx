@@ -1,45 +1,26 @@
 import styled from 'styled-components';
 
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-export const Table = styled.table`
+export const TableBook = styled.table`
   width: 95%;
   margin: 20px auto;
   border-collapse: collapse;
   border: 1px solid #ccc;
-`;
 
-export const TableHeader = styled.th`
-  background-color: #f2f2f2;
-  padding: 10px;
-  text-align: left;
-`;
-
-export const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #f2f2f2;
+  tr {
+    &:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    th {
+      background-color: #f2f2f2;
+      padding: 10px;
+      text-align: left;
+    }
+    td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
   }
-`;
-
-export const TableCell = styled.td`
-  padding: 10px;
-  border: 1px solid #ccc;
-`;
-export const TableBtn = styled.td`
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: center;
-`;
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center; /* Centraliza horizontalmente os botões */
-  margin-top: 10px; /* Espaçamento superior */
 `;
 
 export const EditButton = styled.button`
@@ -69,3 +50,5 @@ export const DeleteButton = styled.button`
     background-color: #ff4d4d;
   }
 `;
+
+export default TableBook;

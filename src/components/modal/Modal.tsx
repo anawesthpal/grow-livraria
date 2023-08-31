@@ -1,4 +1,4 @@
-import { LivroProps } from '../pages/Home';
+import { LivroProps } from '../../pages/Home';
 import ModalEdicao from './ModalEdicao';
 import ModalExclusao from './ModalExclusao';
 
@@ -8,6 +8,7 @@ interface ModalProps {
   editar: () => void;
   mudaEstado: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   fechar: () => void;
+  excluir: () => void;
 }
 
 function Modal(props: ModalProps) {
@@ -16,7 +17,7 @@ function Modal(props: ModalProps) {
       {props.type === 'edicao' ? (
         <ModalEdicao livro={props.livro} editar={props.editar} mudaEstado={props.mudaEstado} fechar={props.fechar} />
       ) : (
-        <ModalExclusao />
+        <ModalExclusao excluir={props.excluir} fechar={props.fechar} />
       )}
     </div>
   );

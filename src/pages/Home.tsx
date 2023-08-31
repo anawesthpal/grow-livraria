@@ -1,11 +1,9 @@
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { v4 as randomUUID } from 'uuid';
 import FormStyled from '../components/FormStyled';
-import Modal from '../components/Modal';
-import ModalStyled from '../components/ModalStyled';
-import { Container, DeleteButton, EditButton, Table, TableBtn, TableCell, TableHeader, TableRow } from '../components/TableStyled';
+import Table from '../components/Table';
+import Modal from '../components/modal/Modal';
+import ModalStyled from '../components/modal/ModalStyled';
 
 export interface LivroProps {
   id: string;
@@ -36,6 +34,7 @@ function Home() {
   const [modo, setModo] = useState<modoProps>({ tipo: 'edicao', aberto: false });
   const [livro, setLivro] = useState<LivroProps>(estadoInicial);
   const [livros, setLivros] = useState<LivroProps[]>([]);
+  const [indexEncontrado, setIndexEncontrado] = useState(0);
 
   function mudarEstado(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setLivro({ ...livro, [e.target.name]: e.target.value });
@@ -108,6 +107,24 @@ function Home() {
     setLivro(estadoInicial);
   }
 
+  function prepararExclusao(id: string) {
+    setModo({
+      tipo: 'exclusao',
+      aberto: true
+    });
+
+    setIndexEncontrado(livros.findIndex((item) => item.id == id));
+  }
+
+  function excluir() {
+    const copiaLista = [...livros];
+
+    if (indexEncontrado != -1) {
+      copiaLista.splice(indexEncontrado, 1);
+      setLivros(copiaLista);
+    }
+  }
+
   function fecharModal() {
     setModo({
       tipo: 'edicao',
@@ -151,51 +168,21 @@ function Home() {
         </div>
 
         <button type="submit">Enviar</button>
-        <button type="button" onClick={editar}>
-          salvar edição
-        </button>
       </FormStyled>
 
       {/* rafa */}
-    <Container>
-      <h1>Livros</h1>
-      <Table>
-        <thead>
-          <tr>
-            <TableHeader scope="col">Título</TableHeader>
-            <TableHeader scope="col">Autor</TableHeader>
-            <TableHeader scope="col">Ano de Publicação</TableHeader>
-            <TableHeader scope="col">Gênero</TableHeader>
-            <TableHeader scope="col">Descrição</TableHeader>
-            <TableHeader scope="col">Ações</TableHeader>
-          </tr>
-        </thead>
-        <tbody>
-          {livros.map((livro) => (
-            <TableRow key={livro.id}>
-              <TableCell>{livro.titulo}</TableCell>
-              <TableCell>{livro.autor}</TableCell>
-              <TableCell>{livro.anoDePublicacao}</TableCell>
-              <TableCell>{livro.genero}</TableCell>
-              <TableCell>{livro.descricao}</TableCell>
-              <TableBtn>
-              <EditButton onClick={() => prepararEdicao(livro.id)}>
-                  <FontAwesomeIcon icon={faEdit} /> EDITAR
-                </EditButton>
-                <DeleteButton>
-                  <FontAwesomeIcon icon={faTrash} /> EXCLUIR
-                </DeleteButton>
-              </TableBtn>
-
-            </TableRow>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
+      <Table livros={livros} prepararEdicao={prepararEdicao} prepararExclusao={prepararExclusao} />
 
       {modo?.aberto && (
         <ModalStyled>
-          <Modal type={modo.tipo} livro={livro} editar={editar} mudaEstado={mudarEstado} fechar={fecharModal} />
+          <Modal
+            excluir={excluir}
+            type={modo.tipo}
+            livro={livro}
+            editar={editar}
+            mudaEstado={mudarEstado}
+            fechar={fecharModal}
+          />
         </ModalStyled>
       )}
     </>

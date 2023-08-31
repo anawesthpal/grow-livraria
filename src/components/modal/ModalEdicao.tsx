@@ -1,4 +1,5 @@
-import { LivroProps } from '../pages/Home';
+import { LivroProps } from '../../pages/Home';
+import ModalEdicaoStyled from './ModalEdicaoStyled';
 
 interface ModalEdicaoProps {
   livro: LivroProps;
@@ -9,25 +10,25 @@ interface ModalEdicaoProps {
 
 function ModalEdicao(props: ModalEdicaoProps) {
   return (
-    <>
-      <label>Título:</label>
+    <ModalEdicaoStyled>
+      <label>Título</label>
       <input type="text" value={props.livro.titulo} name="titulo" onChange={props.mudaEstado} />
 
-      <label>Autor:</label>
+      <label>Autor</label>
       <input type="text" value={props.livro.autor} name="autor" onChange={props.mudaEstado} />
 
-      <label>Ano de publicação:</label>
+      <label>Ano de publicação</label>
       <input type="number" value={props.livro.anoDePublicacao} name="anoDePublicacao" onChange={props.mudaEstado} />
 
-      <label>Gênero:</label>
+      <label>Gênero</label>
       <input type="text" value={props.livro.genero} name="genero" onChange={props.mudaEstado} />
 
-      <label>Descrição:</label>
+      <label>Descrição</label>
       <textarea value={props.livro.descricao} name="descricao" onChange={props.mudaEstado} />
 
       <button onClick={props.editar}>Editar</button>
       <button onClick={props.fechar}>Fechar</button>
-    </>
+    </ModalEdicaoStyled>
   );
 }
 
