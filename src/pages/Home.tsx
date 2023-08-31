@@ -1,6 +1,9 @@
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { v4 as randomUUID } from 'uuid';
 import ModalStyled from '../components/ModalStyled';
+import { Container, DeleteButton, EditButton, Table, TableBtn, TableCell, TableHeader, TableRow } from '../components/TableStyled';
 
 export interface LivroProps {
   id: string;
@@ -132,35 +135,41 @@ function Form() {
       </form>
 
       {/* rafa */}
-      <table>
+    <Container>
+      <h1>Livros</h1>
+      <Table>
         <thead>
           <tr>
-            <th scope="col">Título</th>
-            <th scope="col">Autor</th>
-            <th scope="col">Ano de Publicação</th>
-            <th scope="col">Genero</th>
-            <th scope="col">Descricão</th>
-            <th scope="col">Data de Cadastro</th>
+            <TableHeader scope="col">Título</TableHeader>
+            <TableHeader scope="col">Autor</TableHeader>
+            <TableHeader scope="col">Ano de Publicação</TableHeader>
+            <TableHeader scope="col">Gênero</TableHeader>
+            <TableHeader scope="col">Descrição</TableHeader>
+            <TableHeader scope="col">Ações</TableHeader>
           </tr>
         </thead>
         <tbody>
           {livros.map((livro) => (
-            <tr>
-              <td>{livro.titulo}</td>
-              <td>{livro.autor}</td>
-              <td>{livro.anoDePublicacao}</td>
-              <td>{livro.genero}</td>
-              <td>{livro.descricao}</td>
-              <td>
-                <button onClick={() => prepararEdicao(livro.id)}>EDITAR</button>
-              </td>
-              <td>
-                <button>EXCLUIR</button>
-              </td>
-            </tr>
+            <TableRow key={livro.id}>
+              <TableCell>{livro.titulo}</TableCell>
+              <TableCell>{livro.autor}</TableCell>
+              <TableCell>{livro.anoDePublicacao}</TableCell>
+              <TableCell>{livro.genero}</TableCell>
+              <TableCell>{livro.descricao}</TableCell>
+              <TableBtn>
+              <EditButton onClick={() => prepararEdicao(livro.id)}>
+                  <FontAwesomeIcon icon={faEdit} /> EDITAR
+                </EditButton>
+                <DeleteButton>
+                  <FontAwesomeIcon icon={faTrash} /> EXCLUIR
+                </DeleteButton>
+              </TableBtn>
+
+            </TableRow>
           ))}
         </tbody>
-      </table>
+      </Table>
+    </Container>
 
       {modo?.tipo === 'edicao' ? (
         <ModalStyled>
