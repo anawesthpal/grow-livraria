@@ -123,6 +123,11 @@ function Home() {
       copiaLista.splice(indexEncontrado, 1);
       setLivros(copiaLista);
     }
+
+    setModo({
+      tipo: 'edicao',
+      aberto: false
+    });
   }
 
   function fecharModal() {
